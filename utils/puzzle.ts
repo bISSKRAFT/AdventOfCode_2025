@@ -13,8 +13,8 @@ export class Puzzle<T, S> {
     this.solver = solver;
   }
 
-  public async read(path: string): Promise<string[]> {
-    return await this.fileReader.read(path);
+  public async read(path: string, split?: string): Promise<string[]> {
+    return await this.fileReader.read(path, split);
   }
 
   public parse(data: string[]): T {
