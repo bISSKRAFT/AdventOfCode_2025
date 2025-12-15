@@ -10,29 +10,35 @@ export class SecondSolver implements Solver<string> {
 
   exec(input: string[]): number {
     for (const line of input) {
-      const parts = line.split("-");
-      let candidate: string = parts[0];
-      if (parts[0].length % 2 !== 0) {
-        candidate = this.getNextNumberWithOneMoreDigit(Number(parts[0]))
-          .toString();
-      }
-      while (Number(candidate) <= Number(parts[1])) {
-        if (this.isHit(candidate)) {
-          this.counter.addToCounter(Number(candidate));
+      const [start, end] = line.split("-").map(Number);
+      for (let candidate = start; candidate <= end; candidate++) {
+        const candidateStr = candidate.toString();
+        if (
+          candidateStr.length > 1 &&
+          (this.hasOnlyOneDigit(candidateStr) || this.isHit(candidateStr))
+        ) {
+          this.counter.addToCounter(candidate);
         }
-        candidate = (Number(candidate) + 1).toString();
       }
     }
     return this.counter.count;
   }
 
-  private isHit(number: string): boolean {
-    const firstHalf = number.slice(0, number.length / 2);
-    const secondHalf = number.slice(number.length / 2);
-    return firstHalf === secondHalf;
+  private hasOnlyOneDigit(number: string): boolean {
+    const splits = number.split("");
+    return new Set(splits).size === 1;
   }
 
-  private getNextNumberWithOneMoreDigit(num: number): number {
-    return Math.pow(10, Math.floor(Math.log10(num)) + 1);
+  private isHit(number: string): boolean {
+    const L = number.length;
+    for (let block = 2; block <= (L >> 1); block++) {
+      if (L % block !== 0) continue;
+      const res: string[] = [];
+      for (let i = 0; i < L; i += block) {
+        res.push(number.slice(i, i + block));
+      }
+      if (new Set(res).size == 1) return true;
+    }
+    return false;
   }
 }
