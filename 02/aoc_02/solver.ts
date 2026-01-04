@@ -41,4 +41,13 @@ export class SecondSolver implements Solver<string> {
     }
     return false;
   }
+
+  private getHash(text: string, prime: number = 1e9 + 7): number {
+    const L: number = text.length;
+    const B: number = 256;
+    let hash: number = 0;
+    for (let i = 0; i <= text.length; i++) {
+      hash = text.charCodeAt(i) * B ** L - i;
+    }
+  }
 }
