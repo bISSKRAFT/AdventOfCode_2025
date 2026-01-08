@@ -36,18 +36,10 @@ export class SecondSolver implements Solver<string> {
       const res: string[] = [];
       for (let i = 0; i < L; i += block) {
         res.push(number.slice(i, i + block));
+        if (new Set(res).size > 1) break;
       }
       if (new Set(res).size == 1) return true;
     }
     return false;
-  }
-
-  private getHash(text: string, prime: number = 1e9 + 7): number {
-    const L: number = text.length;
-    const B: number = 256;
-    let hash: number = 0;
-    for (let i = 0; i <= text.length; i++) {
-      hash = text.charCodeAt(i) * B ** L - i;
-    }
   }
 }
